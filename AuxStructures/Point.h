@@ -2,11 +2,14 @@
 
 template <typename T>
 class Point {
+
 private:
     T x;
     T y;
 public:
+    typedef T t;
     Point (T x, T y);
+    Point ();
     bool operator== (const Point<T>&);
     double distance (const Point<T>&);
     T getX ();
@@ -17,6 +20,10 @@ template <typename T>
 Point<T>::Point (T x, T y) {
     this->x = x;
     this->y = y;
+}
+
+template <typename T>
+Point<T>::Point () {
 }
 
 template <typename T>

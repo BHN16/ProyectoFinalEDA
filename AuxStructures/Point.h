@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 template <typename T>
 class Point {
 
@@ -10,8 +10,8 @@ public:
     typedef T t;
     Point (T x, T y);
     Point ();
-    bool operator== (const Point<T>&);
-    double distance (const Point<T>&);
+    bool operator== ( Point<T>&);
+    double distance ( Point<T>&);
     T getX ();
     T getY ();
 };
@@ -27,12 +27,12 @@ Point<T>::Point () {
 }
 
 template <typename T>
-bool Point<T>::operator== (const Point<T>& p) {
+bool Point<T>::operator== ( Point<T>& p) {
     return (this->x == p.getX() && this->y == p.getY())? true : false;
 }
 
 template <typename T>
-double Point<T>::distance (const Point<T>& p) {
+double Point<T>::distance ( Point<T>& p) {
     return sqrt((p.getX() - this->x)*(p.getX() - this->x) + (p.getY() - this->y)*(p.getY() - this->y));
 }
 

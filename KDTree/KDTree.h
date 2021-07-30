@@ -14,8 +14,11 @@ public:
     std::vector<Node*> range(Point p1, Point p2) override;
     Point* nearest_neighbor (Point p) override;
     void print();
+    std::vector<Point>& nearest_neighborhood(Point p, double distance);
+
 private:
     Node** Intersearch(Point p, Node** current, bool level);
+    void Inter_nearest_neighborhood(Point p, double distance, std::vector<Point>& vector_neighboors, Node* current , bool level);
     void Interprint(Node *);
 };
 
@@ -112,6 +115,77 @@ Node* KDTree<Node,Point>::search( Point p){
     //return *(this->Intersearch(p,&this->root,0));
 
 }
+
+
+template <typename Node, typename Point>
+std::vector<Point>& KDTree<Node,Point>::nearest_neighborhood(Point p, double distance){
+
+    std::vector<Point> vector_neighboors;
+    Inter_nearest_neighborhood(p, distance, vector_neighboors,this->root,0);
+    return vector_neighboors;
+}
+
+template <typename Node, typename Point>
+void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, double distance, std::vector<Point>& vector_neighboors, Node *current, bool level){
+
+
+    if(current == nullptr ){
+        return ;
+    }
+
+    auto cur_point = current->get_point();
+
+
+    if(current->get(level,p)){
+
+        this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->right()),!level);
+        if(current->get_point().distance(p)<=distance){
+            std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
+
+            vector_neighboors.push_back(current->get_point());
+        }
+        if(current->left()==nullptr) return;
+        double per_distance;
+
+        if(level==true){
+            per_distance = p.getPerpendicularX(current->get_point());
+
+        }else{
+            per_distance = p.getPerpendicularY(current->get_point());
+        }
+        if(per_distance<=distance){
+            this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->left()),!level);        
+        }
+
+
+    }
+    else{
+
+
+
+
+
+         this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->left()) ,!level);
+        if(current->get_point().distance(p)<=distance){
+            std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
+            vector_neighboors.push_back(current->get_point());
+        }
+        if(current->right()==nullptr) return;
+        double per_distance;
+        if(level==true){
+            per_distance = p.getPerpendicularX(current->get_point());
+        }else{
+            per_distance = p.getPerpendicularY(current->get_point());
+        }
+        if(per_distance<=distance){
+            this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->right()),!level);        
+        }
+
+
+    }
+
+}
+
 
 
 template <typename Node, typename Point>

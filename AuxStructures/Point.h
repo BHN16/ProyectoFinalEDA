@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 #include <iostream>
 template <typename T>
 class Point {
@@ -12,6 +13,10 @@ public:
     Point ();
     bool operator== ( Point<T>&);
     double distance ( Point<T>&);
+    double getPerpendicularX ( Point<T>);
+    double getPerpendicularY ( Point<T>);
+
+    
     T getX ();
     T getY ();
 };
@@ -32,8 +37,18 @@ bool Point<T>::operator== ( Point<T>& p) {
 }
 
 template <typename T>
-double Point<T>::distance ( Point<T>& p) {
-    return sqrt((p.getX() - this->x)*(p.getX() - this->x) + (p.getY() - this->y)*(p.getY() - this->y));
+double Point<T>::getPerpendicularX ( Point<T> p) {
+    return std::sqrt((p.getY() - this->y)*(p.getY() - this->y));
+}
+
+template <typename T>
+double Point<T>::getPerpendicularY ( Point<T> p) {
+    return std::sqrt((p.getX() - this->x)*(p.getX() - this->x));
+}
+
+template <typename T>
+double Point<T>::distance ( Point<T> &p) {
+    return std::sqrt((p.getX() - this->x)*(p.getX() - this->x) + (p.getY() - this->y)*(p.getY() - this->y));
 }
 
 template <typename T>

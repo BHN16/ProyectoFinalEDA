@@ -6,17 +6,65 @@
 #include "RangeTree/RangeNode.h"
 #include "RTree/RTree.h"
 #include "RTree/RNode.h"
+
+
+#include <iostream>
+
+#include <iomanip>
+#include <vector>
+
 using namespace std;
+ 
+
+
 
 int main () {
-    Point<double> p1(1,2);
-    Point<double> p2(3,4);
+
+
+    std::cout.precision(17);
+
+
+    KDTree<KDNode<long double>, Point<long double>> kde;
+
+    kde.readFile();
+    kde.insertPoints();
+
+
+
+
+
+/*
+    Point<double> p1(-1,2);
+    Point<double> p2(3,-4);
+    Point<double> p3(4,2);
+    Point<double> p4(-201,6);
+    Point<double> p5(9,6);
+    Point<double> p6(0,7);
+    Point<double> p7(0,6);
+    Point<double> p8(10,4);
+    Point<double> p9(4,3);
+    Point<double> p10(1,2);
+    
+
     KDTree<KDNode<double>, Point<double>> kde;
+    //std:cout<<p1.getX()<<endl;
     kde.insert(p1);
-    kde.search(p2);
+    kde.insert(p2);
+    kde.insert(p3);
+    kde.insert(p4);
+    kde.insert(p5);
+    kde.insert(p6);
+    kde.insert(p7);
+    kde.insert(p8);
+
+
+
+    kde.search(p10);
     kde.range(p1,p2);
     kde.nearest_neighbor(p1);
-    RangeTree<RangeNode<double>, Point<double>> range;
+    kde.nearest_neighborhood(p9,3.16);
+    */
+    /*RangeTree<RangeNode<double>, Point<double>> range;
     range.insert(p1);
     range.search(p2);
     range.range(p1,p2);
@@ -26,5 +74,26 @@ int main () {
     r.search(p2);
     r.range(p1,p2);
     r.nearest_neighbor(p1);
+    */
+    //kde.print();
+
+    Point<long double> buscar(-73.691947937040596,42.700859069824219);
+    auto retornar = kde.nearest_neighborhood(buscar,2);
+    for(auto val : *retornar){
+        std::cout<<val.getX()<<" ; "<<val.getY()<<"\n";
+    }
+    //kde.search(buscar);
+
+
+
+
+
+    
+
+
+
+
+
+
     return 0;
 }

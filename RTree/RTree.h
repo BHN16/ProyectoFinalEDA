@@ -77,7 +77,7 @@ bool RTree<Node,Point,K>::sameRegion (Point in, Point out) {
 template <typename Node, typename Point, int K>
 void RTree<Node,Point,K>::readFile () {
     std::vector<MBR<typename Point::t, Point>> barrios;
-    std::ifstream myFile("../Data/datos.txt");
+    std::ifstream myFile("Data/datos.txt");
     std::string name;
     typename Point::t lonII, latII, lonSD, latSD;
     for (int i = 0; i < 310; i++) {
@@ -98,7 +98,7 @@ void RTree<Node,Point,K>::readFile () {
 template <typename Node, typename Point, int K>
 void RTree<Node,Point,K>::barriosIguales() {
     std::string line, word;
-    std::ifstream myFile("../Data/green_tripdata_2015-01.csv"); 
+    std::ifstream myFile("Data/green_tripdata_2015-01.csv"); 
     std::getline ( myFile, line );
     std::cout << std::setprecision(17);
     long long id = 1;
@@ -134,7 +134,7 @@ void RTree<Node,Point,K>::barriosIguales() {
 template <typename Node, typename Point, int K>
 void RTree<Node,Point,K>::readPoints () {
     std::string line, word;
-    std::ifstream myFile("../Data/green_tripdata_2015-01.csv"); 
+    std::ifstream myFile("Data/green_tripdata_2015-01.csv"); 
     std::getline ( myFile, line );
     std::cout << std::setprecision(17);
     long long id = 1;

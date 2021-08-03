@@ -1,15 +1,15 @@
 #pragma once
 #include <iostream>
+#include "RTree/RTree.h"
 #include "RTree/MBR.h"
 #include "RTree/RNode.h"
-#include "RTree/RTree.h"
 #include "AuxStructures/Point.h"
 #include "KDTree/KDTree.h"
 #include "KDTree/KDNode.h"
 
 class Consultas {
 public:
-    RTree<RNode< MBR<long double, Point<long double>>,5>,Point<long double>,5> Tree1_2;
+    RTree<RNode< MBR<long double, Point<long double>>,5>,Point<long double>,5> Tree2;
     KDTree<KDNode<long double>, Point<long double>> kde;
     
 
@@ -20,21 +20,23 @@ public:
         kde.insertPoints();
         std::cout<<"Insertando RTree\n";
 
-        Tree1_2.readFile();
-        Tree1_2.readPoints();
+        Tree2.readFile();
+        Tree2.readPoints();
+
+
         //Tree1_2.getNVal();
     }
 
 
     void Pregunta1(){
         std::cout<<"Resolviendo la consulta 1 \n\n";
-        Tree1_2.barriosIguales();
+        Tree2.barriosIguales();
 
     }
 
     void Pregunta2(){
         std::cout<<"Resolviendo la consulta 2 \n\n";    
-        Tree1_2.getNVal();
+        Tree2.getNVal();
 
     }
 

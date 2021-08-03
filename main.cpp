@@ -17,9 +17,11 @@ int main () {
 
     Consultas soluciones;
 
-    soluciones.Pregunta5(); 
     soluciones.Pregunta1(); 
+
     soluciones.Pregunta2(); 
+
+    soluciones.Pregunta5(); 
 
 
 

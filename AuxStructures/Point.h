@@ -1,6 +1,8 @@
 #pragma once
-#include <math.h>
+
+
 #include <iostream>
+
 template <typename T>
 class Point {
 
@@ -15,10 +17,11 @@ public:
     T distance ( Point<T>&);
     T getPerpendicularX ( Point<T>);
     T getPerpendicularY ( Point<T>);
-
-    
+    T distance (const Point<T>&);
     T getX ();
     T getY ();
+    void show ();
+    //~Point ();
 };
 
 template <typename T>
@@ -34,6 +37,11 @@ Point<T>::Point () {
 template <typename T>
 bool Point<T>::operator== ( Point<T>& p) {
     return (this->x == p.getX() && this->y == p.getY())? true : false;
+}
+
+template <typename T>
+void Point<T>::show () {
+    std::cout << "(" << this->x << "," << this->y << ") ";
 }
 
 template <typename T>
@@ -60,3 +68,7 @@ template <typename T>
 T Point<T>::getY () {
     return this->y;
 }
+/*
+template <typename T>
+Point<T>::~Point () {
+}*/

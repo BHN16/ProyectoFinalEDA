@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 template <typename T>
 class Point {
 
@@ -11,9 +13,11 @@ public:
     Point (T x, T y);
     Point ();
     bool operator== (const Point<T>&);
-    double distance (const Point<T>&);
+    T distance (const Point<T>&);
     T getX ();
     T getY ();
+    void show ();
+    //~Point ();
 };
 
 template <typename T>
@@ -27,12 +31,17 @@ Point<T>::Point () {
 }
 
 template <typename T>
+void Point<T>::show () {
+    std::cout << "(" << this->x << "," << this->y << ") ";
+}
+
+template <typename T>
 bool Point<T>::operator== (const Point<T>& p) {
     return (this->x == p.getX() && this->y == p.getY())? true : false;
 }
 
 template <typename T>
-double Point<T>::distance (const Point<T>& p) {
+T Point<T>::distance (const Point<T>& p) {
     return sqrt((p.getX() - this->x)*(p.getX() - this->x) + (p.getY() - this->y)*(p.getY() - this->y));
 }
 
@@ -45,3 +54,7 @@ template <typename T>
 T Point<T>::getY () {
     return this->y;
 }
+/*
+template <typename T>
+Point<T>::~Point () {
+}*/

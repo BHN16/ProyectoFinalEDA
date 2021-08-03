@@ -79,7 +79,7 @@ int main () {
 
     Point<long double> buscar(-73.691947937040596,42.700859069824219);
     
-    auto retornar = kde.nearest_neighborhood(buscar,0.004);
+    auto retornar = kde.nearest_neighborhood(buscar,210);
     for(auto val : *retornar){
         std::cout<<val.getX()<<" ; "<<val.getY()<<"\n";
     }

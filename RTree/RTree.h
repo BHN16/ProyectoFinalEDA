@@ -59,8 +59,6 @@ bool RTree<Node,Point,K>::sameRegionHelper (Node* n, Point in, Point out) {
     for (int i = 0; i < n->childrens.size(); i++) {
         if (n->childrens[i]->mbr.insideArea(in) && n->childrens[i]->mbr.insideArea(out)) {
             return true && this->sameRegionHelper(n->childrens[i]->rnode, in, out);
-        } else {
-            return false;
         }
     }
     return false;
@@ -71,8 +69,6 @@ bool RTree<Node,Point,K>::sameRegion (Point in, Point out) {
     for (int i = 0; i < this->root->childrens.size(); i++) {
         if (this->root->childrens[i]->mbr.insideArea(in) && this->root->childrens[i]->mbr.insideArea(out)) {
             return true && sameRegionHelper(this->root->childrens[i]->rnode, in, out);
-        } else {
-            return false;
         }
     }
     return false;
@@ -108,7 +104,7 @@ void RTree<Node,Point,K>::barriosIguales() {
     long long id = 1;
     typename Point::t aux1, aux2;
     std::vector<std::pair<int,std::pair<Point,Point>>> travels;
-    while ( std::getline ( myFile, line ) ) {
+    while (std::getline (myFile, line)) {
         std::stringstream ss(line);
         for (int i = 0 ; i < 5; i++) std::getline(ss, word, ',');
         ss >> aux1 ;

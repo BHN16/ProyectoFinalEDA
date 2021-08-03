@@ -12,9 +12,9 @@ public:
     Point (T x, T y);
     Point ();
     bool operator== ( Point<T>&);
-    double distance ( Point<T>&);
-    double getPerpendicularX ( Point<T>);
-    double getPerpendicularY ( Point<T>);
+    T distance ( Point<T>&);
+    T getPerpendicularX ( Point<T>);
+    T getPerpendicularY ( Point<T>);
 
     
     T getX ();
@@ -37,17 +37,17 @@ bool Point<T>::operator== ( Point<T>& p) {
 }
 
 template <typename T>
-double Point<T>::getPerpendicularX ( Point<T> p) {
+T Point<T>::getPerpendicularX ( Point<T> p) {
     return std::sqrt((p.getY() - this->y)*(p.getY() - this->y));
 }
 
 template <typename T>
-double Point<T>::getPerpendicularY ( Point<T> p) {
+T Point<T>::getPerpendicularY ( Point<T> p) {
     return std::sqrt((p.getX() - this->x)*(p.getX() - this->x));
 }
 
 template <typename T>
-double Point<T>::distance ( Point<T> &p) {
+T Point<T>::distance ( Point<T> &p) {
     return std::sqrt((p.getX() - this->x)*(p.getX() - this->x) + (p.getY() - this->y)*(p.getY() - this->y));
 }
 

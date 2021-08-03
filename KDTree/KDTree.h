@@ -3,10 +3,13 @@
 #include "../EstructuraBase.h"
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 template <typename Node, typename Point>
 class KDTree : public EstructuraBase<Node,Point> {
 public:
+
     KDTree ();
     Node* search (Point p) override;
     void insert (Point p) override;
@@ -14,13 +17,114 @@ public:
     std::vector<Node*> range(Point p1, Point p2) override;
     Point* nearest_neighbor (Point p) override;
     void print();
-    std::vector<Point>& nearest_neighborhood(Point p, double distance);
+    std::vector<Point>* nearest_neighborhood(Point p, typename Point::t distance);
+    void readFile();
+    void insertPoints();
 
 private:
+
     Node** Intersearch(Point p, Node** current, bool level);
-    void Inter_nearest_neighborhood(Point p, double distance, std::vector<Point>& vector_neighboors, Node* current , bool level);
+    void Inter_nearest_neighborhood(Point p, typename Point::t distance, std::vector<Point>* vector_neighboors, Node* current , bool level);
     void Interprint(Node *);
+
+    class travel{
+        public:
+        travel(long long id_ , std::pair<typename Point::t , typename Point::t> origin_,  std::pair<typename Point::t , typename Point::t> destination_) :
+        id(id_),
+        origin(origin_),
+        destination(destination_){}
+
+    long long id; // numero de fila en el csv
+    
+    std::pair<typename Point::t, typename Point::t> origin; // punto de partida del viaje
+    std::pair<typename Point::t , typename Point::t> destination; // destino del viaje
+
+    };
+
+    std::vector<travel> travels;
+
+    void GetTravels();
+
+
+
 };
+
+template<typename Node, typename Point>
+void KDTree<Node, Point>::insertPoints(){
+
+    int contador = 0 ;
+
+    std::cout << "\n fila  ;  coordenadas origen ; coordenadas  destino \n\n"; 
+    for (travel t : this->travels)
+    {
+        // first es longitude y second es latitude
+        //std::cout << t.id << " ; " << t.origin.first <<  " " << t.origin.second << "  ; "  << t.destination.first << " " << t.destination.second << "\n";  
+        //Point<double> p(t.origin.first, t.origin.second);
+        this->insert(Point(t.origin.first,t.origin.second));
+        this->insert(Point(t.destination.first,t.destination.second));
+
+        contador++;
+     
+    }
+    std::cout<<"acabon insertada\n";
+}
+
+template<typename Node, typename Point>
+void KDTree<Node, Point>::readFile(){
+    GetTravels();
+}
+
+template <typename Node, typename Point>
+void KDTree<Node, Point>::GetTravels(){
+    std::string path = "green_tripdata_2015-01.csv";
+    std::string line, word;
+    std::ifstream myfile (path);
+
+
+
+    getline ( myfile, line );
+
+    long long id = 1;
+
+    while ( getline ( myfile, line ) ) 
+    {
+        std::stringstream ss(line);
+        
+        for (int i = 0 ; i < 5; i++) getline(ss, word, ',');
+
+        std::pair<typename Point::t , typename Point::t> origin;
+        std::pair<typename Point::t , typename Point::t> destination;
+        
+        ss >> origin.first ;
+        ss.ignore();
+        ss >> origin.second;
+
+        ss.ignore();
+
+        ss >> destination.first ;
+        ss.ignore();
+        ss >> destination.second;
+
+        //this->insert(Point(origin.first,origin.second));
+        //this->insert(Point(destination.first,destination.second));
+
+
+        this->travels.emplace_back( travel(id , origin, destination ) );
+        
+        id++;
+    
+        continue;
+    }
+    
+    std::cout<<"Acabo lectura \n";
+    
+    myfile.close();
+
+}
+
+
+
+
 
 template <typename Node, typename Point>
 KDTree<Node,Point>::KDTree () {
@@ -59,23 +163,29 @@ Node** KDTree<Node,Point>::Intersearch (Point p, Node** current, bool level) {
 
     //std::cout<<p.getX()<<"-"<<p.getY()<<std::endl;
     //std::cout<<current->get_point().getX()<<std::endl;
+        //std::cout<<"Nullpointer\n";
 
     if(*current == nullptr){
         return current;
     }
     else if((*current)->get_point()==p){
+
         return current;
     }
 
-    //std::cout<<"buscando "<<p.getX()<<"\n";
 
     auto cur_point = (*current)->get_point();
-
+    //std::cout<<"Llego aca"<<"\n";
 
     if((*current)->get(level,p)){
+
+        //std::cout<<"buscando redercha "<<p.getX()<<"\n";
+
         return this->Intersearch(p,(*current)->right(),!level);
     }
     else{
+        //std::cout<<"buscando ozquierda"<<p.getX()<<"\n";
+
         return this->Intersearch(p,(*current)->left(),!level);
     }
 
@@ -89,15 +199,16 @@ void KDTree<Node,Point>::insert (Point p) {
 
     
     auto target = Intersearch(p,&this->root,0);
+
     if(*target==nullptr){
-        //std::cout<<"Insertado "<<p.getX()<<"\n";
-        *target = new Node(p);
+
+        *target = new Node(p.getX(),p.getY());
     }
 
     
 
     //std::cout<<this->root->get_point().getX()<<" _ "<<this->root->get_point().getY()<<"\n";
-    std::cout << "HOLA MUNDO INSERTADO\n";
+    //std::cout << "HOLA MUNDO INSERTADO\n";
 
 }
 
@@ -118,15 +229,16 @@ Node* KDTree<Node,Point>::search( Point p){
 
 
 template <typename Node, typename Point>
-std::vector<Point>& KDTree<Node,Point>::nearest_neighborhood(Point p, double distance){
+std::vector<Point>* KDTree<Node,Point>::nearest_neighborhood(Point p, typename Point::t distance ){
 
-    std::vector<Point> vector_neighboors;
+
+    std::vector<Point>* vector_neighboors = new std::vector<Point>();
     Inter_nearest_neighborhood(p, distance, vector_neighboors,this->root,0);
     return vector_neighboors;
 }
 
 template <typename Node, typename Point>
-void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, double distance, std::vector<Point>& vector_neighboors, Node *current, bool level){
+void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, typename Point::t distance , std::vector<Point>* vector_neighboors, Node *current, bool level){
 
 
     if(current == nullptr ){
@@ -140,12 +252,12 @@ void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, double distance, st
 
         this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->right()),!level);
         if(current->get_point().distance(p)<=distance){
-            std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
+            //std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
 
-            vector_neighboors.push_back(current->get_point());
+            vector_neighboors->push_back(current->get_point());
         }
         if(current->left()==nullptr) return;
-        double per_distance;
+        typename Point::t per_distance;
 
         if(level==true){
             per_distance = p.getPerpendicularX(current->get_point());
@@ -168,10 +280,10 @@ void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, double distance, st
          this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->left()) ,!level);
         if(current->get_point().distance(p)<=distance){
             std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
-            vector_neighboors.push_back(current->get_point());
+            vector_neighboors->push_back(current->get_point());
         }
         if(current->right()==nullptr) return;
-        double per_distance;
+        typename Point::t per_distance;
         if(level==true){
             per_distance = p.getPerpendicularX(current->get_point());
         }else{

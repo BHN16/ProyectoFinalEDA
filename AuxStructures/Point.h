@@ -2,6 +2,7 @@
 
 
 #include <iostream>
+#include <math.h>
 
 template <typename T>
 class Point {

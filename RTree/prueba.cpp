@@ -87,6 +87,7 @@ int main () {
     Tree2.readFile();
     Tree2.readPoints();
     Tree2.getNVal();
+    Tree2.barriosIguales();
     // barrios con mayor cantidad de viajes
     // viajes con origen y destino el mismo barrio
     //Tree2.printTree();

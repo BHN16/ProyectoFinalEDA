@@ -34,6 +34,7 @@ public:
     void readFile ();
     void readPoints();
     bool sameRegion (Point in, Point out);
+    void barriosIguales ();
     //~RTree();
 };
 
@@ -46,21 +47,35 @@ RTree<Node,Point,K>::~RTree() {
 }*/
 
 template <typename Node, typename Point, int K>
-bool sameRegionHelper (Node* n, Point in, Point out) {
-    for (int i = 0; i < this->root->childrens.size(); i++) {
-        if (this->root->childrens[i]->mbr.insideArea(in) && this->root->childrens[i]->mbr.insideArea(out)) {
-            return true & this->insertAux(this->root->childrens[i]->rnode, in, out);
+bool RTree<Node,Point,K>::sameRegionHelper (Node* n, Point in, Point out) {
+    if (n->isLeaf()) {
+        for (int i = 0; i < n->childrens.size(); i++) {
+            if (n->childrens[i]->mbr.insideArea(in) && n->childrens[i]->mbr.insideArea(out)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    for (int i = 0; i < n->childrens.size(); i++) {
+        if (n->childrens[i]->mbr.insideArea(in) && n->childrens[i]->mbr.insideArea(out)) {
+            return true && this->sameRegionHelper(n->childrens[i]->rnode, in, out);
+        } else {
+            return false;
         }
     }
+    return false;
 }
 
 template <typename Node, typename Point, int K>
-bool sameRegion (Point in, Point out) {
+bool RTree<Node,Point,K>::sameRegion (Point in, Point out) {
     for (int i = 0; i < this->root->childrens.size(); i++) {
         if (this->root->childrens[i]->mbr.insideArea(in) && this->root->childrens[i]->mbr.insideArea(out)) {
-            return true & this->insertAux(this->root->childrens[i]->rnode, in, out);
+            return true && sameRegionHelper(this->root->childrens[i]->rnode, in, out);
+        } else {
+            return false;
         }
     }
+    return false;
 }
 
 template <typename Node, typename Point, int K>
@@ -85,6 +100,41 @@ void RTree<Node,Point,K>::readFile () {
 }
 
 template <typename Node, typename Point, int K>
+void RTree<Node,Point,K>::barriosIguales() {
+    std::string line, word;
+    std::ifstream myFile("../Data/green_tripdata_2015-01.csv"); 
+    std::getline ( myFile, line );
+    std::cout << std::setprecision(17);
+    long long id = 1;
+    typename Point::t aux1, aux2;
+    std::vector<std::pair<int,std::pair<Point,Point>>> travels;
+    while ( std::getline ( myFile, line ) ) {
+        std::stringstream ss(line);
+        for (int i = 0 ; i < 5; i++) std::getline(ss, word, ',');
+        ss >> aux1 ;
+        ss.ignore();
+        ss >> aux2;
+        ss.ignore();
+        Point origin(aux1,aux2);
+        ss >> aux1;
+        ss.ignore();
+        ss >> aux2;
+        Point destino (aux1, aux2);
+        if (this->sameRegion (origin, destino)) {
+            travels.push_back({id, {origin,destino}});
+        }
+        id++;
+        continue;
+    }
+    for (int i = 0; i < travels.size(); i++) {
+        std::cout << travels[i].first << " - ";
+        travels[i].second.first.show();
+        travels[i].second.second.show();
+        std::cout << std::endl;
+    }
+}
+
+template <typename Node, typename Point, int K>
 void RTree<Node,Point,K>::readPoints () {
     std::string line, word;
     std::ifstream myFile("../Data/green_tripdata_2015-01.csv"); 
@@ -104,15 +154,16 @@ void RTree<Node,Point,K>::readPoints () {
         ss >> aux1;
         ss.ignore();
         ss >> aux2;
-        Point destination(aux1,aux2);
+        //Point destino (aux1, aux2);
         travels.emplace_back(origin);
-        travels.emplace_back(destination);
+        //travles.emplace_back(destino)
         id++;
         continue;
     }
     for (int i = 0; i < travels.size(); i++) {
         this->insert(travels[i]);
     }
+    myFile.close();
 }
 
 template <typename Node, typename Point, int K>

@@ -42,7 +42,6 @@ private:
     };
 
     std::vector<travel> travels;
-
     void GetTravels();
 
 
@@ -54,7 +53,7 @@ void KDTree<Node, Point>::insertPoints(){
 
     int contador = 0 ;
 
-    std::cout << "\n fila  ;  coordenadas origen ; coordenadas  destino \n\n"; 
+    //std::cout << "\n fila  ;  coordenadas origen ; coordenadas  destino \n\n"; 
     for (travel t : this->travels)
     {
         // first es longitude y second es latitude
@@ -62,11 +61,12 @@ void KDTree<Node, Point>::insertPoints(){
         //Point<double> p(t.origin.first, t.origin.second);
         this->insert(Point(t.origin.first,t.origin.second));
         this->insert(Point(t.destination.first,t.destination.second));
-
+        //std::cout<<t.origin.first<<","<<t.origin.second<<"\n";
+        //std::cout<<t.destination.first<<","<<t.destination.second<<"\n";
         contador++;
      
     }
-    std::cout<<"acabon insertada\n";
+    //std::cout<<"acabon insertada\n";
 }
 
 template<typename Node, typename Point>
@@ -116,7 +116,7 @@ void KDTree<Node, Point>::GetTravels(){
         continue;
     }
     
-    std::cout<<"Acabo lectura \n";
+    //std::cout<<"Acabo lectura \n";
     
     myfile.close();
 
@@ -128,7 +128,7 @@ void KDTree<Node, Point>::GetTravels(){
 
 template <typename Node, typename Point>
 KDTree<Node,Point>::KDTree () {
-    std::cout << "HOLA MUNDO\n";
+    //std::cout << "HOLA MUNDO\n";
     this->root=nullptr;
 }   
 
@@ -140,7 +140,7 @@ void KDTree<Node, Point>::Interprint(Node *current){
     if(*(current->left())!=nullptr){
         Interprint(*(current->left()));
     }
-    std::cout<<current->get_point().getX()<<" - "<<current->get_point().getY()<<"\n";
+    //std::cout<<current->get_point().getX()<<" - "<<current->get_point().getY()<<"\n";
     if(*(current->right())!=nullptr){
         Interprint(*(current->right()));
     }
@@ -214,7 +214,7 @@ void KDTree<Node,Point>::insert (Point p) {
 
 template <typename Node, typename Point>
 Node* KDTree<Node,Point>::search( Point p){
-    std::cout << "HOLA MUNDO SERCHEADO\n";
+    //std::cout << "HOLA MUNDO SERCHEADO\n";
     auto searching = *(this->Intersearch(p,&this->root,0));
     if((searching)!=nullptr){
         std::cout<<"Encontrado\n";
@@ -252,7 +252,7 @@ void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, typename Point::t d
 
         this->Inter_nearest_neighborhood(p,distance,vector_neighboors,*(current->right()),!level);
         if(current->get_point().distance(p)<=distance){
-            //std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
+            std::cout<<"Pusheo -> ("<<current->get_point().getX()<<"-"<<current->get_point().getY()<<")\n";
 
             vector_neighboors->push_back(current->get_point());
         }
@@ -302,13 +302,13 @@ void KDTree<Node,Point>::Inter_nearest_neighborhood(Point p, typename Point::t d
 
 template <typename Node, typename Point>
 std::vector<Node*> KDTree<Node,Point>::range (Point p1, Point p2) {
-    std::cout << "HOLA MUNDO EN RANGO\n";
+    //std::cout << "HOLA MUNDO EN RANGO\n";
     std::vector<Node*> v = {nullptr};
     return v;
 }
 
 template <typename Node, typename Point>
 Point* KDTree<Node,Point>::nearest_neighbor (Point p) {
-    std::cout << "HOLA MUNDO VECINO\n";
+    //std::cout << "HOLA MUNDO VECINO\n";
     return nullptr;
 }

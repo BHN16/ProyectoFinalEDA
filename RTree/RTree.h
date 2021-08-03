@@ -128,6 +128,7 @@ void RTree<Node,Point,K>::barriosIguales() {
         travels[i].second.second.show();
         std::cout << std::endl;
     }
+    std::cout<<travels.size()<<std::endl;
 }
 
 template <typename Node, typename Point, int K>

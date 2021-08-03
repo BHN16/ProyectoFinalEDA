@@ -1,13 +1,5 @@
-#include <iostream>
-#include "AuxStructures/Point.h"
-#include "KDTree/KDTree.h"
-#include "KDTree/KDNode.h"
-#include "RangeTree/RangeTree.h"
-#include "RangeTree/RangeNode.h"
-#include "RTree/RTree.h"
-#include "RTree/RNode.h"
 
-
+#include "Consultas.h"
 #include <iostream>
 
 #include <iomanip>
@@ -23,11 +15,12 @@ int main () {
 
     std::cout.precision(17);
 
+    Consultas soluciones;
 
-    KDTree<KDNode<long double>, Point<long double>> kde;
+    soluciones.Pregunta5(); 
+    soluciones.Pregunta1(); 
+    soluciones.Pregunta2(); 
 
-    kde.readFile();
-    kde.insertPoints();
 
 
 
@@ -76,14 +69,11 @@ int main () {
     r.nearest_neighbor(p1);
     */
     //kde.print();
-
-    Point<long double> buscar(-73.691947937040596,42.700859069824219);
-    
-    auto retornar = kde.nearest_neighborhood(buscar,210);
+/*
     for(auto val : *retornar){
         std::cout<<val.getX()<<" ; "<<val.getY()<<"\n";
     }
-    
+  */  
     //kde.search(buscar);
 
 

@@ -42,7 +42,6 @@ private:
     };
 
     std::vector<travel> travels;
-
     void GetTravels();
 
 

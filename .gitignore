@@ -29,6 +29,7 @@
 *.csv
 *.swp
 *.json
+*.txt
 
 # Executables
 *.exe

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <string>
 
 template <typename T, typename Point>
 class MBR {
@@ -12,6 +13,7 @@ private:
     std::vector<Point>* childrens;
     double hilbertVal;
     Point centroide;
+    std::string nombre;
 public:
     MBR (Point a, Point b) {
         this->esquinaSuperior = a;
@@ -19,14 +21,51 @@ public:
         this->childrens = nullptr;
         this->hilbertVal = 0;
         this->centroide = this->calculateCentroid(); 
+        this->childrens = new std::vector<Point>();
+    }
+
+    MBR (Point a, Point b, std::string n) {
+        this->esquinaSuperior = a;
+        this->esquinaInferior = b;
+        this->childrens = nullptr;
+        this->hilbertVal = 0;
+        this->centroide = this->calculateCentroid(); 
+        this->childrens = new std::vector<Point>();
+        this->nombre = n;
     }
 
     MBR () {
+        this->childrens = new std::vector<Point>();
+    }
 
+    std::string getNombre () {
+        return this->nombre;
+    }
+
+    bool emptyChildrens() {
+        return this->childrens->empty();
+    }
+
+    void showPoints () {
+        for (int i = 0; i < this->childrens->size(); i++) {
+            (*this->childrens)[i].show();
+            std::cout << std::endl;
+        }
+    }
+
+    int getNumberPoints() {
+        return this->childrens->size();
     }
 
     void showMBR() {
         std::cout << this->esquinaSuperior.getX() << "," << this->esquinaSuperior.getY() << " - " << this->esquinaInferior.getX() << "," << this->esquinaInferior.getY() << std::endl;
+    }
+
+    bool insideArea (Point p) {
+        if (p.getX() >= this->esquinaInferior.getX() && p.getY() >= this->esquinaInferior.getY() && p.getX() <= this->esquinaSuperior.getX() && p.getY() <= this->esquinaSuperior.getY()) {
+            return true;
+        }
+        return false;
     }
 
     Point getEsquinaSuperior () {
@@ -80,6 +119,11 @@ public:
     bool operator > (MBR<typename Point::t,Point>& m) const {
         return (this->centroide.getX() > m.getCentroide().getX())? true : false;
     }
+    /*
+    ~MBR () {
+        delete childrens;
+    }
+    */
     /*
     void calculateHilbertVal (double n) {
         int s;

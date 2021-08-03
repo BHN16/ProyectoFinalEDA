@@ -12,10 +12,13 @@ private:
         subNode () {
 
         }
+        /*
+        ~subNode () {
+            delete rnode;
+        }*/
     };
     int capacity;
 public:
-
     std::vector<subNode*> childrens;
 
     RNode () {
@@ -38,9 +41,19 @@ public:
         capacity++;
     }
 
+    void showPoints() {
+        for (int i = 0; i < this->childrens.size(); i++) {
+            std::cout << "MBR:\n";
+            this->childrens[i]->mbr.showMBR();
+            std::cout << "Puntos:\n";
+            this->childrens[i]->mbr.showPoints();
+            std::cout << "\n";
+        }
+    }
+
     void show() {
-        for (int i = 0; i < childrens.size(); i++) {
-            std::cout << childrens[i]->mbr.getEsquinaSuperior().getX() << "," << childrens[i]->mbr.getEsquinaSuperior().getY() << " - " << childrens[i]->mbr.getEsquinaInferior().getX() << "," << childrens[i]->mbr.getEsquinaInferior().getY() << std::endl;
+        for (int i = 0; i < this->childrens.size(); i++) {
+            this->childrens[i]->mbr.showMBR();
         }
     }
 
@@ -53,4 +66,11 @@ public:
             if (childrens[i]->rnode) return false;
         return true;
     }
+    /*
+    ~RNode() {
+        for (int i = 0; i < childrens.size(); i++) {
+            std::cout << "hola nodo\n";
+            delete childrens[i];
+        }
+    }*/
 };
